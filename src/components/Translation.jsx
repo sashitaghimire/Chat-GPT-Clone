@@ -1,6 +1,6 @@
 import React from "react";
 
-function Translation({ doStuff, setInput, result }) {
+function Translation({ doStuff, setInput, result, loader }) {
   return (
     <div>
       <textarea
@@ -14,7 +14,8 @@ function Translation({ doStuff, setInput, result }) {
           DO YOU STUFF
         </button>
       </div>
-      {<h3 className="result-text">{result.length > 0 ? result : ""}</h3>}
+      {<h3 className="result-text">{result?.length > 0 ? result : ""}</h3>}
+      {loader ? "Loading..." : ""}
     </div>
   );
 }

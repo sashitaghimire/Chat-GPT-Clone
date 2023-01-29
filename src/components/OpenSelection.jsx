@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-function OpenSelection({ arrayItems, setOption }) {
+function OpenSelection({ arrayItems, selectOption }) {
   const navigate = useNavigate();
   return (
     <>
@@ -18,7 +18,7 @@ function OpenSelection({ arrayItems, setOption }) {
             <div
               key={item?.id}
               className="grid-child"
-              onClick={() => setOption(item?.option)}
+              onClick={() => selectOption(item?.option)}
             >
               <h4>{item?.name}</h4>
               <p>{item?.description}</p>
