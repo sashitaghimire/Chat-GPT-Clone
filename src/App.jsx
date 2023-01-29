@@ -1,38 +1,47 @@
 import { useState } from "react";
+import OpenSelection from "./components/OpenSelection";
+import GenerateImage from "./pages/GenerateImage";
+import { arrayItems } from "./AIOptions";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-import { Configuration, OpenAIApi } from "openai";
+import Translation from "./components/Translation";
 
 function App() {
-  const [prompt, setPrompt] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const configuration = new Configuration({
-    apiKey: import.meta.env.VITE_Open_AI_Key,
-  });
+  const [option, setOption] = useState({});
+  const [input, setInput] = useState("");
 
-  const openai = new OpenAIApi(configuration);
-  const generateImage = async () => {
-    const res = await openai.createImage({
-      prompt: prompt,
-      n: 1,
-      size: "1024x1024",
-    });
-    setImageUrl(res?.data?.data[0]?.url);
+  const selectOption = (option) => {
+    setOption(option);
   };
 
+  const doStuff = () => {
+    setOption({ ...option, prompt: input });
+  };
   return (
-    <div className="app-main">
-      <h3>Generate Image using Open AI</h3>
-      <input
-        className="app-input"
-        placeholder="Type something to Generate an image"
-        onChange={(e) => setPrompt(e.target.value)}
-      />
-      <button onClick={generateImage}>Generate an image</button>
-      {imageUrl?.length > 0 ? (
-        <img src={imageUrl} alt={prompt} className="result-image" />
-      ) : (
-        <></>
-      )}
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/">
+            <Route
+              index
+              element={
+                <>
+                  {Object.values(option)?.length === 0 ? (
+                    <OpenSelection
+                      arrayItems={arrayItems}
+                      selectOption={selectOption}
+                    />
+                  ) : (
+                    <Translation setInput={setInput} doStuff={doStuff} />
+                  )}
+                </>
+              }
+            />
+
+            <Route path="/open-ai" element={<GenerateImage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
